@@ -1,20 +1,45 @@
 import React, { Component } from "react";
 import "./App.css";
 
+const APIENDPOINT = "https://jsonplaceholder.typicode.com/posts";
 class App extends Component {
   state = {
-    posts: []
+    posts: [],
   };
+
+  componentDidMount() {
+    fetch(APIENDPOINT)
+      .then((response) => response.json())
+      .then((posts) => {
+        console.log(posts);
+        this.setState({ posts });
+      });
+  }
 
   handleAdd = () => {
-    console.log("Add");
+    fetch(APIENDPOINT, {
+      method: "POST",
+      body: JSON.stringify({
+        title: "foo",
+        body: "bar",
+        userId: 1,
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((post) => {
+        const posts = [post, ...this.state.posts];
+        this.setState({ posts });
+      });
   };
 
-  handleUpdate = post => {
+  handleUpdate = (post) => {
     console.log("Update", post);
   };
 
-  handleDelete = post => {
+  handleDelete = (post) => {
     console.log("Delete", post);
   };
 
@@ -33,7 +58,7 @@ class App extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.posts.map(post => (
+            {this.state.posts.map((post) => (
               <tr key={post.id}>
                 <td>{post.title}</td>
                 <td>
