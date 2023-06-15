@@ -54,16 +54,24 @@ class App extends Component {
       });
   };
 
-  handleDelete = (post) => {
-    fetch(APIENDPOINT + "/" + post["id"], {
-      method: "DELETE",
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        let posts = [...this.state.posts];
-        posts = posts.filter((p) => p !== post);
-        this.setState({ posts });
+  handleDelete = async (post) => {
+    /*we have implemented below logic in optimistic update way 
+    So the optimistic update means we assumes the network call will be sucessfull and we'll get correct response so will update sate and if the network call fails then we'll just revert the changes*/
+    let OriginalPosts = this.state.posts;
+
+    let posts = [...this.state.posts];
+    posts = posts.filter((p) => p.id !== post.id);
+    this.setState({ posts });
+
+    try {
+      await fetch(APIENDPOINT + "/" + post["id"], {
+        method: "DELETE",
       });
+      throw new Error("");
+    } catch (e) {
+      alert("Something went wrong while making the API call!");
+      this.setState({ posts: OriginalPosts });
+    }
   };
 
   render() {
