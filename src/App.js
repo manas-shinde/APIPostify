@@ -35,12 +35,35 @@ class App extends Component {
       });
   };
 
-  handleUpdate = (post) => {
-    console.log("Update", post);
+  handleUpdate = async (post) => {
+    await fetch(APIENDPOINT + "/" + post["id"], {
+      method: "PATCH",
+      body: JSON.stringify({
+        title: "UPDATED",
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        let posts = [...this.state.posts];
+        let index = posts.indexOf(post);
+        posts[index] = { ...json };
+        this.setState({ posts });
+      });
   };
 
   handleDelete = (post) => {
-    console.log("Delete", post);
+    fetch(APIENDPOINT + "/" + post["id"], {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((json) => {
+        let posts = [...this.state.posts];
+        posts = posts.filter((p) => p !== post);
+        this.setState({ posts });
+      });
   };
 
   render() {
