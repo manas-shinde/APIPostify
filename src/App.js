@@ -69,7 +69,12 @@ class App extends Component {
       });
       throw new Error("");
     } catch (e) {
-      alert("Something went wrong while making the API call!");
+      if (e.response && e.response.status == 404) {
+        alert("This post has already been deleted.");
+      } else {
+        console.log(`Logging the error ${e}`);
+        alert("An unexpected error occurred.");
+      }
       this.setState({ posts: OriginalPosts });
     }
   };
