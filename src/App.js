@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import http from "./services/httpService";
 import config from "./config.json";
 import "./App.css";
 
@@ -9,14 +9,14 @@ class App extends Component {
   };
 
   async componentDidMount() {
-    let { data: posts } = await axios.get(config.apiEndpoint);
+    let { data: posts } = await http.get(config.apiEndpoint);
 
     this.setState({ posts });
   }
 
   handleAdd = async () => {
     let obj = { title: "New Post", body: "New Post body" };
-    let { data: post } = await axios.post(config.apiEndpoint, obj);
+    let { data: post } = await http.post(config.apiEndpoint, obj);
     const posts = [post, ...this.state.posts];
     this.setState({ posts });
   };
@@ -24,7 +24,7 @@ class App extends Component {
   handleUpdate = async (post) => {
     let obj = { title: "UPDATED" };
 
-    let { data: updatedPost } = await axios.patch(
+    let { data: updatedPost } = await http.patch(
       config.apiEndpoint + "/" + post["id"],
       obj
     );
@@ -46,13 +46,10 @@ class App extends Component {
     this.setState({ posts });
 
     try {
-      await axios.delete(config.apiEndpoint + "/" + post["id"]);
+      await http.delete(config.apiEndpoint + "/" + post["id"]);
     } catch (e) {
       if (e.response && e.response.status === 404) {
         alert("This post has already been deleted.");
-      } else {
-        console.log(`Logging the error ${e}`);
-        alert("An unexpected error occurred.");
       }
       this.setState({ posts: OriginalPosts });
     }
