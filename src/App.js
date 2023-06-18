@@ -1,22 +1,22 @@
 import React, { Component } from "react";
 import axios from "axios";
+import config from "./config.json";
 import "./App.css";
 
-const APIENDPOINT = "https://jsonplaceholder.typicode.com/posts";
 class App extends Component {
   state = {
     posts: [],
   };
 
   async componentDidMount() {
-    let { data: posts } = await axios.get(APIENDPOINT);
+    let { data: posts } = await axios.get(config.apiEndpoint);
 
     this.setState({ posts });
   }
 
   handleAdd = async () => {
     let obj = { title: "New Post", body: "New Post body" };
-    let { data: post } = await axios.post(APIENDPOINT, obj);
+    let { data: post } = await axios.post(config.apiEndpoint, obj);
     const posts = [post, ...this.state.posts];
     this.setState({ posts });
   };
@@ -25,7 +25,7 @@ class App extends Component {
     let obj = { title: "UPDATED" };
 
     let { data: updatedPost } = await axios.patch(
-      APIENDPOINT + "/" + post["id"],
+      config.apiEndpoint + "/" + post["id"],
       obj
     );
 
@@ -46,7 +46,7 @@ class App extends Component {
     this.setState({ posts });
 
     try {
-      await axios.delete(APIENDPOINT + "/" + post["id"]);
+      await axios.delete(config.apiEndpoint + "/" + post["id"]);
     } catch (e) {
       if (e.response && e.response.status === 404) {
         alert("This post has already been deleted.");
