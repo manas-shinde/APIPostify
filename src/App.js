@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import axios from "axios";
 import "./App.css";
 
 const APIENDPOINT = "https://jsonplaceholder.typicode.com/posts";
@@ -7,51 +8,32 @@ class App extends Component {
     posts: [],
   };
 
-  componentDidMount() {
-    fetch(APIENDPOINT)
-      .then((response) => response.json())
-      .then((posts) => {
-        console.log(posts);
-        this.setState({ posts });
-      });
+  async componentDidMount() {
+    let { data: posts } = await axios.get(APIENDPOINT);
+
+    this.setState({ posts });
   }
 
-  handleAdd = () => {
-    fetch(APIENDPOINT, {
-      method: "POST",
-      body: JSON.stringify({
-        title: "foo",
-        body: "bar",
-        userId: 1,
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((post) => {
-        const posts = [post, ...this.state.posts];
-        this.setState({ posts });
-      });
+  handleAdd = async () => {
+    let obj = { title: "New Post", body: "New Post body" };
+    let { data: post } = await axios.post(APIENDPOINT, obj);
+    const posts = [post, ...this.state.posts];
+    this.setState({ posts });
   };
 
   handleUpdate = async (post) => {
-    await fetch(APIENDPOINT + "/" + post["id"], {
-      method: "PATCH",
-      body: JSON.stringify({
-        title: "UPDATED",
-      }),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8",
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        let posts = [...this.state.posts];
-        let index = posts.indexOf(post);
-        posts[index] = { ...json };
-        this.setState({ posts });
-      });
+    let obj = { title: "UPDATED" };
+
+    let { data: updatedPost } = await axios.patch(
+      APIENDPOINT + "/" + post["id"],
+      obj
+    );
+
+    let posts = [...this.state.posts];
+
+    let index = posts.indexOf(post);
+    posts[index] = { ...updatedPost };
+    this.setState({ posts });
   };
 
   handleDelete = async (post) => {
@@ -64,12 +46,9 @@ class App extends Component {
     this.setState({ posts });
 
     try {
-      await fetch(APIENDPOINT + "/" + post["id"], {
-        method: "DELETE",
-      });
-      throw new Error("");
+      await axios.delete(APIENDPOINT + "/" + post["id"]);
     } catch (e) {
-      if (e.response && e.response.status == 404) {
+      if (e.response && e.response.status === 404) {
         alert("This post has already been deleted.");
       } else {
         console.log(`Logging the error ${e}`);
