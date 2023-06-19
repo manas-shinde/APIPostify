@@ -1,10 +1,12 @@
 {
-  "name": "http-app",
+  "name": "api-postify",
+  "homepage": "https://manas-shinde.github.io/APIPostify",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "axios": "^0.18.1",
     "bootstrap": "^4.1.2",
+    "gh-pages": "^5.0.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
@@ -12,6 +14,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
