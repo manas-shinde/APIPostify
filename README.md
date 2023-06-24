@@ -28,7 +28,7 @@ npm start
 
 ## Live Project
 
-You can access the live version of this project at the following link: Live Project
+You can access the live version of this project at the following link: [Live Project](https://manas-shinde.github.io/APIPostify/)
 
 ## Concepts Explained
 
@@ -38,7 +38,7 @@ This project utilizes Axios, a popular JavaScript library, for making API calls.
 
 ### 2) Axios Interceptors
 
-Axios interceptors are functions that allow us to intercept requests or responses before they are handled by our application. We can use interceptors to add headers, modify request/response data, handle errors, and more. In our app, we make use of Axios interceptors to handle authentication, error handling, and other global request/response modifications. You can explore the axios.interceptors section in our codebase to see how we configure and use interceptors.
+Axios interceptors are functions that allow us to intercept requests or responses before they are handled by our application. We can use interceptors to add headers, modify request/response data, handle errors, and more. In our app, we make use of Axios interceptors to handle authentication, error handling, and other global request/response modifications. You can explore the Axios.interceptors section in our codebase to see how we configure and use interceptors.
 
 ### 3) Toaster in React
 
